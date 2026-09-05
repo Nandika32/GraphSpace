@@ -28,9 +28,9 @@ const GraphSpaceTour = (() => {
     },
     {
       title: 'Worked examples',
-      body: `<strong>General Workspace</strong> is a blank canvas. <strong>Example 1</strong> and
-             <strong>Example 2</strong> load complete, ready-to-study textbook LP problems — problem
-             statement, data tables, and the constraints already graphed.`,
+      body: `<strong>General Workspace</strong> is a blank canvas. Every <strong>Example</strong> tab
+             loads a complete, ready-to-study textbook LP problem — problem statement, data tables,
+             and the constraints already graphed.`,
       target: '#workspace-tabs',
     },
     {

@@ -757,6 +757,64 @@ const Geometry2D = (() => {
     zoomToConstraints(); // also renders
   }
 
+  // Two-plant production preset — the textbook "Example 2" min-cost problem:
+  // two plants each producing products A and B (x1..x4), minimizing total
+  // cost. The two products share no constraint and don't interact in the
+  // objective, so the true 4-variable problem separates cleanly into two
+  // independent 2-variable LPs. This engine plots 2 (+1 sliced) variables at
+  // a time, so it graphs the Product A subproblem (x1, x2) live; Product B's
+  // parallel subproblem is solved the same way and stated in the problem
+  // card, since it has no relationship to x1/x2 worth forcing onto one graph.
+  function loadTwoPlantPreset() {
+    state.view = { xMin: -2, xMax: 18, yMin: -2, yMax: 18 };
+    state.showFeasibleRegion = true;
+    state.constraints = [
+      { a: 3, b: 1, cz: 0, op: '<=', d: 16, color: COLORS[1 % COLORS.length], visible: true }, // Plant 1 prep time (product A)
+      { a: 1, b: 1, cz: 0, op: '>=', d: 10, color: COLORS[2 % COLORS.length], visible: true }  // Min daily production of A
+    ];
+    colorIdx = 3;
+    state.points = [];
+    state.geometries = [];
+    state.zSlice = 0;
+    state.nonNegativity = true;
+    state.objective = { type: 'min', c1: 15000, c2: 18000, c3: 0 };
+    syncInputsFromState({
+      zMin: -10, zMax: 10, step: 0.5,
+      label: 'Fixed Slice: <strong>z</strong> (unused)',
+      hint: 'This graphed half of the problem (Product A) has only 2 decision variables (x&#8321;, x&#8322;) — the slice has no effect here. Product B (x&#8323;, x&#8324;) is an independent second LP, solved the same way (see the note above the graph).',
+      units: ''
+    });
+    render();
+  }
+
+  // Radio-components preset — the textbook "Example 3" max-profit problem: an
+  // electronics company producing components C1/C2, budget-constrained. Like
+  // the Bottling Plant example, this one teaches that not every listed
+  // constraint ends up binding: the machine-time and assembly-time lines
+  // never actually cross the budget line anywhere in the positive quadrant,
+  // so the budget constraint alone shapes the entire feasible region.
+  function loadRadioComponentsPreset() {
+    state.showFeasibleRegion = true;
+    state.constraints = [
+      { a: 10, b: 40, cz: 0, op: '<=', d: 4000, color: COLORS[1 % COLORS.length], visible: true }, // Budget
+      { a: 3,  b: 2,  cz: 0, op: '<=', d: 2000, color: COLORS[2 % COLORS.length], visible: true }, // Machine time
+      { a: 2,  b: 3,  cz: 0, op: '<=', d: 1400, color: COLORS[3 % COLORS.length], visible: true }  // Assembly time
+    ];
+    colorIdx = 4;
+    state.points = [];
+    state.geometries = [];
+    state.zSlice = 0;
+    state.nonNegativity = true;
+    state.objective = { type: 'max', c1: 20, c2: 30, c3: 0 };
+    syncInputsFromState({
+      zMin: -10, zMax: 10, step: 0.5,
+      label: 'Fixed Slice: <strong>z</strong> (unused)',
+      hint: 'This problem has only 2 decision variables (x&#8321;, x&#8322;) — the slice has no effect here.',
+      units: ''
+    });
+    zoomToConstraints(); // also renders — shows all three lines so the redundant two are visible
+  }
+
   function syncInputsFromState(zBounds) {
     if (!els) cacheEls();
     q('g2d-toggle-region').checked = state.showFeasibleRegion;
@@ -784,5 +842,5 @@ const Geometry2D = (() => {
     setToolMode('select', 'Mode: Select/Move Canvas');
   }
 
-  return { init, refreshLayout, loadBlank, loadProductMixPreset, loadBottlingPlantPreset, zoomToConstraints, zoomToFeasible };
+  return { init, refreshLayout, loadBlank, loadProductMixPreset, loadBottlingPlantPreset, loadTwoPlantPreset, loadRadioComponentsPreset, zoomToConstraints, zoomToFeasible };
 })();

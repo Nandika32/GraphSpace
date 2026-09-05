@@ -34,8 +34,12 @@
 
     const problemCard1 = document.getElementById('g2d-problem-card');
     const problemCard2 = document.getElementById('g2d-problem-card-2');
+    const problemCard3 = document.getElementById('g2d-problem-card-3');
+    const problemCard4 = document.getElementById('g2d-problem-card-4');
     if (problemCard1) problemCard1.classList.toggle('hidden', ws !== 'example1');
     if (problemCard2) problemCard2.classList.toggle('hidden', ws !== 'example2');
+    if (problemCard3) problemCard3.classList.toggle('hidden', ws !== 'example3');
+    if (problemCard4) problemCard4.classList.toggle('hidden', ws !== 'example4');
 
     if (ws === 'general') {
       if (!geometry2dReady) { Geometry2D.init(); geometry2dReady = true; }
@@ -48,6 +52,14 @@
       setMode('2d');
       if (!geometry2dReady) { Geometry2D.init(); geometry2dReady = true; }
       Geometry2D.loadBottlingPlantPreset();
+    } else if (ws === 'example3') {
+      setMode('2d');
+      if (!geometry2dReady) { Geometry2D.init(); geometry2dReady = true; }
+      Geometry2D.loadTwoPlantPreset();
+    } else if (ws === 'example4') {
+      setMode('2d');
+      if (!geometry2dReady) { Geometry2D.init(); geometry2dReady = true; }
+      Geometry2D.loadRadioComponentsPreset();
     }
   }
 

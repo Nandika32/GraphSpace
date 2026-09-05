@@ -28,6 +28,8 @@
       <button class="ws-tab active" data-ws="general" title="Blank workspace">General Workspace</button>
       <button class="ws-tab" data-ws="example1" title="Loads a Product Mix LP preset in the 2D workspace">Example 1 (Product Mix LP)</button>
       <button class="ws-tab" data-ws="example2" title="Loads the Bottling Plant LP preset in the 2D workspace">Example 2 (Bottling Plant)</button>
+      <button class="ws-tab" data-ws="example3" title="Loads the Two-Plant Production LP preset in the 2D workspace">Example 3 (Two-Plant Production)</button>
+      <button class="ws-tab" data-ws="example4" title="Loads the Radio Components LP preset in the 2D workspace">Example 4 (Radio Components)</button>
     </div>
 
     <div class="spacer"></div>
@@ -122,7 +124,7 @@
     </div>
   </div>
 
-
+  <!-- ===================== 2D Workspace (LP + Dynamic Geometry) ===================== -->
   <div id="main-2d" class="hidden">
     <div class="g2d-panel" id="g2d-panel">
       <div class="g2d-card g2d-problem-card hidden" id="g2d-problem-card">
@@ -210,6 +212,92 @@
           and production constraints turn out not to be binding here — the marketing caps alone
           define the feasible region. Use the two zoom buttons below to see the full picture, then
           zoom in on the (much smaller) feasible region.
+        </p>
+      </div>
+
+      <div class="g2d-card g2d-problem-card hidden" id="g2d-problem-card-3">
+        <div class="g2d-card-title">Example 3 — Two-Plant Production LP (Problem Statement)</div>
+        <p class="g2d-problem-text">
+          A company has two plants, each of which produces and supplies two products: A and B. The
+          plants can each work up to 16 hours a day. In plant 1, it takes three hours to prepare and
+          pack 1,000 gallons of A and one hour to prepare and pack one quintal of B. In plant 2, it
+          takes two hours to prepare and pack 1,000 gallons of A and 1.5 hours to prepare and pack a
+          quintal of B. In plant 1, it costs Rs 15,000 to prepare and pack 1,000 gallons of A and Rs
+          28,000 to prepare and pack a quintal of B, whereas these costs are Rs 18,000 and Rs 26,000,
+          respectively, in plant 2. The company is obliged to produce daily at least 10 thousand
+          gallons of A and 8 quintals of B.
+        </p>
+        <table class="g2d-results-table g2d-data-table">
+          <thead><tr><th>Resources / Constraints</th><th>Product A</th><th>Product B</th><th>Total Availability</th></tr></thead>
+          <tbody>
+            <tr><td>Preparation time (hrs)</td><td>Plant 1: 3 hrs/'000 gal</td><td>1 hr/quintal</td><td>16 hrs</td></tr>
+            <tr><td></td><td>Plant 2: 2 hrs/'000 gal</td><td>1.5 hr/quintal</td><td>16 hrs</td></tr>
+            <tr><td>Minimum daily production</td><td>10 thousand gallons</td><td>8 quintals</td><td>&#8212;</td></tr>
+            <tr><td>Cost of production (Rs)</td><td>Plant 1: 15,000/'000 gal</td><td>28,000/quintal</td><td>&#8212;</td></tr>
+            <tr><td></td><td>Plant 2: 18,000/'000 gal</td><td>26,000/quintal</td><td>&#8212;</td></tr>
+          </tbody>
+        </table>
+        <p class="g2d-problem-text">
+          Formulate this problem as an LP model to find out how the company should organize its
+          production so that the required amounts of the two products are obtained at minimum cost.
+        </p>
+        <p class="g2d-hint">
+          Decision variables: x&#8321;, x&#8322; = '000 gallons of A produced in plants 1 and 2;
+          x&#8323;, x&#8324; = quintals of B produced in plants 1 and 2.<br>
+          <strong>Minimize Z = 15000x&#8321; + 18000x&#8322; + 28000x&#8323; + 26000x&#8324;</strong><br>
+          s.t. 3x&#8321;+x&#8322; &le; 16; 2x&#8323;+1.5x&#8324; &le; 16; x&#8321;+x&#8322; &ge; 10;
+          x&#8323;+x&#8324; &ge; 8; x&#8321;,x&#8322;,x&#8323;,x&#8324; &ge; 0.<br>
+          <strong>Note:</strong> the two product lines share no constraint and don't interact in the
+          objective, so this 4&#8209;variable problem is really <em>two independent 2&#8209;variable
+          LPs</em>. Plotted below is the <strong>Product A</strong> subproblem (x&#8321;&#8594;x,
+          x&#8322;&#8594;y) &mdash; minimum at (3, 7), Z = 171,000. The <strong>Product B</strong>
+          subproblem (minimize 28000x&#8323;+26000x&#8324; s.t. 2x&#8323;+1.5x&#8324;&le;16,
+          x&#8323;+x&#8324;&ge;8) solves the same way, with its own minimum at (x&#8323;,x&#8324;) =
+          (0, 8), Z = 208,000. Combined minimum total cost: Rs 379,000.
+        </p>
+      </div>
+
+      <div class="g2d-card g2d-problem-card hidden" id="g2d-problem-card-4">
+        <div class="g2d-card-title">Example 4 — Radio Components LP (Problem Statement)</div>
+        <p class="g2d-problem-text">
+          An electronic company is engaged in the production of two components C&#8321; and C&#8322;
+          used in radio sets. Each unit of C&#8321; costs the company Rs 5 in wages and Rs 5 in
+          material, while each of C&#8322; costs the company Rs 25 in wages and Rs 15 in material.
+          The company sells both products on one&#8209;period credit terms, but the company's labour
+          and material expenses must be paid in cash. The selling price of C&#8321; is Rs 30 per unit
+          and of C&#8322; it is Rs 70 per unit. Because of the strong monopoly of the company for
+          these components, it is assumed that the company can sell at the prevailing prices as many
+          units as it produces. The company's production capacity is, however, limited by two
+          considerations. First, at the beginning of period 1, the company has an initial balance of
+          Rs 4,000 (cash plus bank credit plus collections from past credit sales). Second, the
+          company has available in each period 2,000 hours of machine time and 1,400 hours of
+          assembly time. The production of each C&#8321; requires 3 hours of machine time and 2 hours
+          of assembly time, whereas the production of each C&#8322; requires 2 hours of machine time
+          and 3 hours of assembly time. Formulate this problem as an LP model so as to maximize the
+          total profit to the company.
+        </p>
+        <table class="g2d-results-table g2d-data-table">
+          <thead><tr><th>Resources / Constraints</th><th>C&#8321;</th><th>C&#8322;</th><th>Total Availability</th></tr></thead>
+          <tbody>
+            <tr><td>Budget (Rs)</td><td>10/unit</td><td>40/unit</td><td>Rs 4,000</td></tr>
+            <tr><td>Machine time</td><td>3 hrs/unit</td><td>2 hrs/unit</td><td>2,000 hours</td></tr>
+            <tr><td>Assembly time</td><td>2 hrs/unit</td><td>3 hrs/unit</td><td>1,400 hours</td></tr>
+            <tr><td>Selling price (Rs)</td><td>30</td><td>70</td><td>&#8212;</td></tr>
+            <tr><td>Cost: wages + material (Rs)</td><td>10</td><td>40</td><td>&#8212;</td></tr>
+          </tbody>
+        </table>
+        <p class="g2d-hint">
+          Decision variables: x&#8321;, x&#8322; = units of C&#8321;, C&#8322; produced.<br>
+          Profit/unit = selling price &minus; cost price = (30&minus;10)x&#8321; + (70&minus;40)x&#8322;.<br>
+          <strong>Maximize Z = 20x&#8321; + 30x&#8322;</strong><br>
+          s.t. 10x&#8321;+40x&#8322; &le; 4000 (budget); 3x&#8321;+2x&#8322; &le; 2000 (machine time);
+          2x&#8321;+3x&#8322; &le; 1400 (assembly time); x&#8321;,x&#8322; &ge; 0.<br>
+          <strong>Note:</strong> like Example 2, this one has non&#8209;binding constraints &mdash;
+          the machine&#8209;time and assembly&#8209;time limits are both completely redundant here;
+          the budget line alone shapes the whole feasible region (check for yourself: neither time
+          line ever crosses the budget line for x&#8321;,x&#8322;&ge;0). Optimum at (x&#8321;,x&#8322;)
+          = (400, 0), Z = 8,000 &mdash; all budget on C&#8321;, with machine and assembly time both
+          left well under capacity.
         </p>
       </div>
 
@@ -356,7 +444,7 @@
   </div>
 </div>
 
-
+<!-- ===================== Color Popover ===================== -->
 <div class="popover hidden" id="color-popover">
   <div id="color-wheel-wrap">
     <div id="sv-box"><div id="sv-cursor"></div></div>
@@ -380,6 +468,7 @@
   </div>
 </div>
 
+<!-- ===================== Export Modal ===================== -->
 <div class="overlay hidden" id="export-overlay">
   <div class="modal">
     <div class="modal-head"><h3>Export</h3><button class="icon-btn" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button></div>
@@ -410,7 +499,7 @@
   </div>
 </div>
 
-
+<!-- ===================== Share Modal ===================== -->
 <div class="overlay hidden" id="share-overlay">
   <div class="modal" style="width:min(460px,92vw)">
     <div class="modal-head"><h3>Share this graph</h3><button class="icon-btn" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button></div>
@@ -422,6 +511,7 @@
   </div>
 </div>
 
+<!-- ===================== Help Modal ===================== -->
 <div class="overlay hidden" id="help-overlay">
   <div class="modal">
     <div class="modal-head"><h3>Syntax guide</h3><button class="icon-btn" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button></div>
